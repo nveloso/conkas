@@ -1,0 +1,6 @@
+pyevmasm==0.2.3
+cbor2==5.1.2
+z3-solver==4.8.8.0
+pycryptodome==3.9.8
+py-solc-x==0.10.1
+solidity_parser==0.0.7
