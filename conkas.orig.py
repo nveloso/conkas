@@ -44,7 +44,6 @@ def main():
     parser.add_argument('file', type=argparse.FileType('rb'), help='File with EVM bytecode hex string to analyse')
     parser.add_argument('--solidity-file', '-s', action='store_true', default=is_solidity_file_default,
                         help=f'Use this option when file is a solidity file instead of EVM bytecode hex string. By default it is {"unset" if not is_solidity_file_default else "set"}')
-    parser.add_argument("--contract", type=str, help="Contract in Solidity source to analyze; if missing, analyse all.")
     parser.add_argument('--verbosity', '-v', type=str, default=log_output_default,
                         help=f'Log output verbosity (NotSet, Debug, Info, Warning, Error, Critical). Default = {log_output_default}')
     parser.add_argument('--vuln-type', '-vt', action='append', default=[],
@@ -88,13 +87,8 @@ def main():
         logger.info(f'Compiling {filename}...')
         contracts = compile_files([filename])
         logger.info('Compiled successfully')
-        contractname = filename + ':' + args.contract if args.contract else None
-        if not contractname in contracts:
-            contractname = None
         srcmap = SourceMap(filename, get_executable())
         for name, contract in contracts.items():
-            if contractname is not None and name != contractname:
-                continue
             runtime_bytecode = contract['bin-runtime']
             bytecodes[name] = runtime_bytecode.encode('utf-8')
     else:
